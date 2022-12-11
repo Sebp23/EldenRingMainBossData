@@ -7,6 +7,7 @@ namespace DataDesignFinal_API
 {
     public class Services
     {
+        //string for connecting to DB
         private string SqlConString { get; set; } = string.Empty;
 
         /// <summary>
@@ -31,12 +32,19 @@ namespace DataDesignFinal_API
             }
         }
 
+        /// <summary>
+        /// Get Data for full report
+        /// </summary>
+        /// <returns></returns>
         public List<BossModel> GetFullReport()
         {
+            //list to hold records
             List<BossModel> bossList = new List<BossModel>();
 
+            //using a connection to the DB
             using (SqlConnection conn = new SqlConnection(SqlConString))
             {
+                //open the connection
                 conn.Open();
 
                 //Sproc used for getting the necessary view
@@ -44,10 +52,11 @@ namespace DataDesignFinal_API
 
                 using (var command = new SqlCommand(sproc, conn))
                 {
+                    //add the parameters, which in this case is the viewname
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@ViewName", "vw_EldenRingFullReport");
 
-                    //Read the table
+                    //Read the table resulting from Sproc
                     var tableReader = command.ExecuteReader();
 
                     //An array that is the size of the amount of values in each row
@@ -74,29 +83,46 @@ namespace DataDesignFinal_API
                     tableReader.Close();
                 }
 
+                //close the connection
                 conn.Close();
             }
 
             return bossList;
         }
 
+        /// <summary>
+        /// Get data for chart one
+        /// </summary>
+        /// <returns></returns>
         public List<ChartModel> GetChartOne()
         {
+            //get chart data from vw_EldenRingChartOne
             return GetChartData("ChartOne");
         }
 
+        /// <summary>
+        /// Get data for chart two
+        /// </summary>
+        /// <returns></returns>
         public List<ChartModel> GetChartTwo()
         {
+            //Get data from vw_EldenRingChartTwo
             return GetChartData("ChartTwo");
         }
 
+        /// <summary>
+        /// Get data for charts
+        /// </summary>
+        /// <param name="viewName">The view that the data will come from. Passed in by GetChartTwo or GetChartOne</param>
+        /// <returns></returns>
         private List<ChartModel> GetChartData(string viewName)
         {
-            //list for chart one data
+            //list for chart data
             List<ChartModel> dataList = new List<ChartModel>();
 
             using (SqlConnection conn = new SqlConnection(SqlConString))
             {
+                //open the connection
                 conn.Open();
 
                 //Sproc used for getting data from desired view
@@ -130,14 +156,20 @@ namespace DataDesignFinal_API
                     tableReader.Close();
                 }
 
+                //close the connection
                 conn.Close();
             }
 
             return dataList;
         }
 
+        /// <summary>
+        /// Get data regarding damage types
+        /// </summary>
+        /// <returns></returns>
         public List<DamageModel> GetDamageInfo()
         {
+            //list for holding the records
             List<DamageModel> damageList = new List<DamageModel>();
 
             using (SqlConnection conn = new SqlConnection(SqlConString))
@@ -149,6 +181,7 @@ namespace DataDesignFinal_API
 
                 using (var command = new SqlCommand(sproc, conn))
                 {
+                    //no parameters, since the Sproc is just a select statement to get data from EldenRing_Damage table
                     command.CommandType = CommandType.StoredProcedure;
 
                     //Read the table
@@ -180,20 +213,25 @@ namespace DataDesignFinal_API
             return damageList;
         }
 
+        /// <summary>
+        /// Get data regarding locations
+        /// </summary>
+        /// <returns></returns>
         public List<LocationModel> GetLocationInfo()
         {
-
+            //List for holding location records
             List<LocationModel> locationList = new List<LocationModel>();
 
             using (SqlConnection conn = new SqlConnection(SqlConString))
             {
                 conn.Open();
 
-                //Sproc used for getting all the Location from the table
+                //Sproc used for getting all the Locations from the table
                 string sproc = $@"[dbo].[spGetAllLocations]";
 
                 using (var command = new SqlCommand(sproc, conn))
                 {
+                    //no parameters, since sproc is just selecting all from EldenRing_Locations table
                     command.CommandType = CommandType.StoredProcedure;
 
                     //Read the table
@@ -207,6 +245,7 @@ namespace DataDesignFinal_API
                     //While there is something to read
                     while (tableReader.Read())
                     {
+                        //map read data to LocationModel
                         LocationModel model = new LocationModel();
                         model.Id = (int)tableReader["id"];
                         model.Location = (string)tableReader["location"];

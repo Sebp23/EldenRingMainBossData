@@ -20,6 +20,12 @@ namespace DataDesignFinal_Forms.Services
             this.MethodSource = methodSource;
         }
 
+        /// <summary>
+        /// Export any errors from the application to a .txt file
+        /// as it may be useful for possible troubleshooting.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public static void ExportErrorsToFile(object sender, EventArgs e)
         {
             //Get the output path
@@ -34,12 +40,12 @@ namespace DataDesignFinal_Forms.Services
             //Only create the file if there are errors to report
             if (ErrorList.Count > 0)
             {
-                //Streamwriter for writing the passed in logs
+                //Streamwriter for writing the passed in errors
                 using (StreamWriter sw = new StreamWriter(outPath, true))
                 {
                     if (ErrorList.Count > 0)
                     {
-                        //For every log, write it out on a new line
+                        //For every error, write it out on a new line
                         foreach (var error in ErrorList)
                         {
                             sw.WriteLine($"{error.Message} -> {error.MethodSource}");
@@ -48,6 +54,7 @@ namespace DataDesignFinal_Forms.Services
                     }
                 }
 
+                //Tell the user that the errors have been exported, as it may be useful if they are troubleshooting
                 MessageBox.Show($"ErrorReport.txt exported to {outPath}");
             }
         }

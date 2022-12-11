@@ -22,6 +22,12 @@ namespace DataDesignFinal_Forms.Services
             this.ResponseStatusDate = responseStatusDate;
         }
 
+        /// <summary>
+        /// Export all logs of API interactions to a file
+        /// As it may be useful for possible troubleshooting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public static void ExportLogsToFile(object sender, EventArgs e)
         {
             //Get the output path

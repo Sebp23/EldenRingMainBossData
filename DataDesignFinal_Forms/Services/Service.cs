@@ -23,7 +23,7 @@ namespace DataDesignFinal_Forms.Services
             //list to hold the data
             List<ChartModel> models = new List<ChartModel>();
 
-            //invoke the endpoint of the api that provides the data for chart 1
+            //invoke the endpoint of the api that provides the data for charts
             using (HttpClient client = new HttpClient())
             {
                 //Set the base url and the request headers
@@ -66,6 +66,7 @@ namespace DataDesignFinal_Forms.Services
 
                 foreach (var model in models)
                 {
+                    //convert to string with ',' delimiter for exporting to csv file
                     string modelStr = $"{model.Id},{model.Name},{model.Type},{model.Location},{model.Strength},{model.Weakness}";
                     stringRecords.Add(modelStr);
                 }
@@ -101,6 +102,7 @@ namespace DataDesignFinal_Forms.Services
 
                 foreach (var model in models)
                 {
+                    //convert to string with ',' delimiter for exporting to csv file
                     string modelStr = $"{model.Id},{model.Location}";
                     stringRecords.Add(modelStr);
                 }
@@ -136,6 +138,7 @@ namespace DataDesignFinal_Forms.Services
 
                 foreach (var model in models)
                 {
+                    //convert to string with ',' delimiter for exporting to csv file
                     string modelStr = $"{model.Id},{model.DamageType}";
                     stringRecords.Add(modelStr);
                 }
@@ -179,6 +182,8 @@ namespace DataDesignFinal_Forms.Services
                     }
                 }
 
+                //Message to be returned for message box if it is successful.
+                //If not, then the message will be based on the catches below.
                 return $"File {outName} succesfully exported to {outPath}";
             }
             catch (IOException e)

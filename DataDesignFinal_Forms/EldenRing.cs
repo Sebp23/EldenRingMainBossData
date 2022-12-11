@@ -29,6 +29,7 @@ namespace DataDesignFinal_Forms
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            //on load, clear the charts and UI
             ClearAllCharts();
         }
 
@@ -47,7 +48,7 @@ namespace DataDesignFinal_Forms
                 //get data
                 var models = service.GetChartData("get-chart-two").Result;
 
-                //add chart 1
+                //add chart
                 panel1.Controls.Add(strengthChart);
 
                 //title and size config
@@ -109,7 +110,7 @@ namespace DataDesignFinal_Forms
                 //get data
                 var models = service.GetChartData("get-chart-one").Result;
 
-                //add chart 1
+                //add chart
                 panel1.Controls.Add(typeChart);
 
                 //title and size config
@@ -165,7 +166,11 @@ namespace DataDesignFinal_Forms
         {
             try
             {
+                //column names for the file to exported
                 string columnNames = "id,Name,Type,Location,Strength,Weakness";
+
+                //This message will be what shows in the messagebox after the data has been exported.
+                //This also passes in a list of strings, which are transformed from a list of BossModel records that are recieved from the API
                 string message = service.ExportToFile(service.GetFullReportData().Result, "FullReport.csv", columnNames);
 
                 MessageBox.Show(message, "Export Result");
@@ -199,7 +204,10 @@ namespace DataDesignFinal_Forms
         {
             try
             {
+                //Column names for exported csv
                 string columnNames = "id,Location";
+
+                //same as FullReport message, but for location csv
                 string message = service.ExportToFile(service.GetLocationReportData().Result, "LocationInfo.csv", columnNames);
 
                 MessageBox.Show(message, "Export Result");
@@ -233,7 +241,10 @@ namespace DataDesignFinal_Forms
         {
             try
             {
+                //column names for exported csv
                 string columnNames = "id,Damage_Type";
+
+                //same as full report message, but for damage info csv
                 string message = service.ExportToFile(service.GetDamageReportData().Result, "DamageInfo.csv", columnNames);
 
                 MessageBox.Show(message, "Export Result");
@@ -263,6 +274,7 @@ namespace DataDesignFinal_Forms
         /// </summary>
         private void ClearAllCharts()
         {
+            //clear all charts present to keep UI clean and prevent overlapping
             strengthChart.Series.Clear();
             strengthChart.ChartAreas.Clear();
             typeChart.Series.Clear();
